@@ -176,55 +176,28 @@
          switch (exporter.status)
          {
              case AVAssetExportSessionStatusCompleted:
-             {
+              {
                  NSURL *outputURL = exporter.outputURL;
                  
                  ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
                  if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:outputURL]) {
                      
-                     [self savefinalVideoFileToDocuments:outputURL];
-                     
-                    // UIImage *img =[objEditView thumbnailFromVideoAtURL:outputURL];
-                     //[objEditView.btnVideomerge setBackgroundImage:img forState:UIControlStateNormal];
-                     
-                     NSString *storeimage = [[self applicationCacheDirectory] stringByAppendingPathComponent:@"FinalVideo"];
-                     storeimage = [storeimage stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",@"merge.png"]];
-                     
-                     //NSData *theData = UIImagePNGRepresentation(img);
-                     //[theData writeToFile:storeimage atomically:YES];
-                     
-                     NSString *storePath = [[self applicationCacheDirectory] stringByAppendingPathComponent:@"FinalVideo"];
-                     storePath = [storePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",@"mergedvideo"]];
                      ALAssetsLibrary* library = [[ALAssetsLibrary alloc]init];
-                     
-                     NSURL *url = [NSURL URLWithString:storePath];
-                     
-                     [library writeVideoAtPathToSavedPhotosAlbum:url completionBlock:^(NSURL *assetURL, NSError *error)
+                     [library writeVideoAtPathToSavedPhotosAlbum:outputURL completionBlock:^(NSURL *assetURL, NSError *error)
                       {
-                          NSMutableDictionary *dict = nil;
+                          NSLog(@"ASSET URL %@",assetURL);
                           if (error)
                           {
-                              dict = [[NSMutableDictionary alloc]init];
-                              [dict setObject:error forKey:@"error"];
+                              NSLog(@"EROR %@ ", error);
+                          }else{
+                              NSLog(@"VIDEO SAVED ");
                           }
-                          if (dict){
-                              //[dict release];
-                              dict = nil;
-                          }
+                          
                       }];
                      
-                     /*
-                     [appDelegate performSelectorOnMainThread:@selector(hideLoadingView) withObject:nil waitUntilDone:NO];
-                      */
-                    // [self DeleteAllVideos];
-                     /*
-                     [delegate performSelectorOnMainThread:@selector(SuccessMerge) withObject:nil waitUntilDone:NO];
-                      */
                      NSLog(@"Video Merge SuccessFullt");
                      lblDisp.text = @"3 Videos Mearge Sucessfully Completed check in Doc Directory";
-                     
                  }
-                 
              }
                  break;
              case AVAssetExportSessionStatusFailed:
